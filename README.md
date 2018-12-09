@@ -1,2 +1,8 @@
 # test2018
-first github repository ever. stores ABAP-coding 
+ABAP object branch of this repository.
+
+
+
+
+
+All product names mentioned are copyright protected. Most of them are registered trademarks of German software manufacturer SAP SE, headquartered in Walldorf, Germany.
