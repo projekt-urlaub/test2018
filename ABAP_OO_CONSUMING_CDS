@@ -1,5 +1,32 @@
 *** Consuming a CDS-view from the application server.
 *** The CDS view was created before any ABAP-source was written using Eclipse (NEON), plug-ins as neccessary (-> ADT from SAP SE). 
-*** 
 
+TRY.
+    cl_salv_gui_table_ida=>create_for_cds_view( EXPORTING iv_cds_view_name = 'ZCDSV_SIMPLE'
+                                                              " RETURNS TYPE REF TO IF_SALV_GUI_TABLE_IDA
+                                              )->fullscreen(  " RETURNS TYPE REF TO IF_SALV_GUI_FULLSCREEN_IDA
+                                              )->display( ).  " without parameters
 
+* There might be better methods for checking a valid access to the CDS-view 'ZCDSV_SIMPLE'.
+* This one displays it's content on a "classical" dynpro.
+
+  CATCH cx_root INTO DATA(lo_cx_root).
+    DATA(lv_longtext) = lo_cx_root->get_longtext( ).
+    WRITE: / lv_longtext, AT sy-scols space.
+ENDTRY.
+
+FIELD-SYMBOLS: <ls_temp> TYPE any.
+
+SELECT * FROM zcdsv_simple INTO TABLE @DATA(lt_tmp_sel).
+IF sy-subrc = 0.
+  LOOP AT lt_tmp_sel ASSIGNING <ls_temp>.
+    WRITE: / <ls_temp>.
+  ENDLOOP.
+
+ELSE.
+  WRITE:/ 'Error trying SELECT FROM CDS-view.', AT sy-scols space.
+ENDIF.
+
+* Try one SELECT just to make sure the CDS-View is accessible on the application server
+
+* Used "inline declarations". I like the "older" way of first declaring and secondly defining/using variables better :)
